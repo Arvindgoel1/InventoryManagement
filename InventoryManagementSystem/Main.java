@@ -6,7 +6,104 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        // Create inventory items
+        System.out.println("=== INVENTORY MANAGEMENT SYSTEM ===\n");
+        
+        // Demonstrate Generic Inventory Class
+        System.out.println("=== MILESTONE 2: GENERIC INVENTORY CLASS ===\n");
+        
+        // Create separate inventories for different item types
+        Inventory<Book> bookInventory = new Inventory<>();
+        Inventory<Clothing> clothingInventory = new Inventory<>();
+        Inventory<Electronics> electronicsInventory = new Inventory<>();
+        
+        try {
+            // Add Books to Book Inventory
+            System.out.println("--- Adding Books ---");
+            bookInventory.add(new Book("B001", "Java Programming", 599.99, 10, "James Gosling"));
+            System.out.println("Added: Java Programming");
+            bookInventory.add(new Book("B002", "Data Structures", 449.50, 15, "Robert Sedgewick"));
+            System.out.println("Added: Data Structures");
+            bookInventory.add(new Book("B003", "Design Patterns", 750.00, 8, "Gang of Four"));
+            System.out.println("Added: Design Patterns");
+            
+            // Add Clothing to Clothing Inventory
+            System.out.println("\n--- Adding Clothing ---");
+            clothingInventory.add(new Clothing("C001", "T-Shirt", 299.99, 50, "L"));
+            System.out.println("Added: T-Shirt");
+            clothingInventory.add(new Clothing("C002", "Jeans", 899.00, 30, "M"));
+            System.out.println("Added: Jeans");
+            clothingInventory.add(new Clothing("C003", "Jacket", 1499.99, 20, "XL"));
+            System.out.println("Added: Jacket");
+            
+            // Add Electronics to Electronics Inventory
+            System.out.println("\n--- Adding Electronics ---");
+            electronicsInventory.add(new Electronics("E001", "Laptop", 45999.00, 5, 24));
+            System.out.println("Added: Laptop");
+            electronicsInventory.add(new Electronics("E002", "Smartphone", 25999.00, 12, 12));
+            System.out.println("Added: Smartphone");
+            electronicsInventory.add(new Electronics("E003", "Headphones", 2999.00, 25, 6));
+            System.out.println("Added: Headphones");
+            
+            // Test Exception Handling: Negative Quantity
+            System.out.println("\n--- Testing Invalid Quantity Exception ---");
+            try {
+                bookInventory.add(new Book("B004", "Invalid Book", 500.00, -5, "Unknown Author"));
+            } catch (InvalidQuantityException e) {
+                System.out.println("Exception caught: " + e.getMessage());
+            }
+            
+            // Test Exception Handling: Duplicate ID
+            System.out.println("\n--- Testing Duplicate Item Exception ---");
+            try {
+                bookInventory.add(new Book("B001", "Duplicate Book", 300.00, 5, "Test Author"));
+            } catch (DuplicateItemException e) {
+                System.out.println("Exception caught: " + e.getMessage());
+            }
+            
+            // Demonstrate Get Method
+            System.out.println("\n--- Get Single Item by ID ---");
+            Book javaBook = bookInventory.get("B001");
+            if (javaBook != null) {
+                System.out.println("Retrieved: " + javaBook.getName() + " by " + javaBook.getAuthor());
+            }
+            
+            // Demonstrate GetAll Method
+            System.out.println("\n--- Get All Books ---");
+            List<Book> allBooks = bookInventory.getAll();
+            for (Book book : allBooks) {
+                System.out.println("- " + book.getName() + " by " + book.getAuthor() + " (Qty: " + book.getQuantity() + ")");
+            }
+            
+            System.out.println("\n--- Get All Clothing ---");
+            List<Clothing> allClothing = clothingInventory.getAll();
+            for (Clothing clothing : allClothing) {
+                System.out.println("- " + clothing.getName() + " Size: " + clothing.getSize() + " (Qty: " + clothing.getQuantity() + ")");
+            }
+            
+            System.out.println("\n--- Get All Electronics ---");
+            List<Electronics> allElectronics = electronicsInventory.getAll();
+            for (Electronics electronics : allElectronics) {
+                System.out.println("- " + electronics.getName() + " Warranty: " + electronics.getWarranty() + " months (Qty: " + electronics.getQuantity() + ")");
+            }
+            
+            // Demonstrate Remove Method
+            System.out.println("\n--- Testing Remove Method ---");
+            Book bookToRemove = bookInventory.get("B002");
+            if (bookToRemove != null) {
+                System.out.println("Removing: " + bookToRemove.getName());
+                bookInventory.remove(bookToRemove);
+                System.out.println("Books remaining: " + bookInventory.getAll().size());
+            }
+            
+        } catch (InvalidQuantityException e) {
+            System.out.println("Error: " + e.getMessage());
+        } catch (DuplicateItemException e) {
+            System.out.println("Error: " + e.getMessage());
+        }
+        
+        System.out.println("\n=== ORIGINAL DEMONSTRATION (Using List) ===\n");
+        
+        // Original demonstration using List
         List<Item> inventory = new ArrayList<>();
         
         // Add Books
@@ -23,8 +120,6 @@ public class Main {
         inventory.add(new Electronics("E001", "Laptop", 45999.00, 5, 24));
         inventory.add(new Electronics("E002", "Smartphone", 25999.00, 12, 12));
         inventory.add(new Electronics("E003", "Headphones", 2999.00, 25, 6));
-        
-        System.out.println("=== INVENTORY MANAGEMENT SYSTEM ===\n");
         
         // Display all items
         System.out.println("--- All Items ---");
