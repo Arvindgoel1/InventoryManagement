@@ -101,6 +101,63 @@ public class Main {
             System.out.println("Error: " + e.getMessage());
         }
         
+        // Demonstrate Recently Viewed Items Tracker
+        System.out.println("\n=== MILESTONE 3: RECENTLY VIEWED ITEMS TRACKER ===\n");
+        
+        RecentlyViewedItems recentlyViewed = new RecentlyViewedItems();
+        
+        // Create some items for demonstration
+        Book book1 = new Book("B001", "Java Programming", 599.99, 10, "James Gosling");
+        Book book2 = new Book("B002", "Data Structures", 449.50, 15, "Robert Sedgewick");
+        Electronics laptop = new Electronics("E001", "Laptop", 45999.00, 5, 24);
+        Clothing tshirt = new Clothing("C001", "T-Shirt", 299.99, 50, "L");
+        Electronics phone = new Electronics("E002", "Smartphone", 25999.00, 12, 12);
+        
+        // View items in sequence
+        System.out.println("--- Viewing Items in Sequence ---");
+        
+        recentlyViewed.addRecentlyViewedItem(book1);
+        System.out.println("Viewed: " + book1.getName());
+        displayRecentlyViewed(recentlyViewed);
+        
+        recentlyViewed.addRecentlyViewedItem(laptop);
+        System.out.println("\nViewed: " + laptop.getName());
+        displayRecentlyViewed(recentlyViewed);
+        
+        recentlyViewed.addRecentlyViewedItem(book2);
+        System.out.println("\nViewed: " + book2.getName());
+        displayRecentlyViewed(recentlyViewed);
+        
+        // Test capacity limit - adding 4th item should remove oldest
+        System.out.println("\n--- Testing Capacity Limit (MAX_SIZE = 3) ---");
+        recentlyViewed.addRecentlyViewedItem(tshirt);
+        System.out.println("Viewed: " + tshirt.getName() + " (4th item)");
+        System.out.println("Expected: Oldest item (Java Programming) should be removed");
+        displayRecentlyViewed(recentlyViewed);
+        
+        // Test re-visiting existing item
+        System.out.println("\n--- Testing Re-visit: Viewing Laptop Again ---");
+        System.out.println("Before re-visit:");
+        displayRecentlyViewed(recentlyViewed);
+        
+        recentlyViewed.addRecentlyViewedItem(laptop);
+        System.out.println("\nAfter re-visiting Laptop:");
+        System.out.println("Expected: Laptop moves to front, order changes but no item removed");
+        displayRecentlyViewed(recentlyViewed);
+        
+        // Add another new item
+        System.out.println("\n--- Adding New Item (Smartphone) ---");
+        recentlyViewed.addRecentlyViewedItem(phone);
+        System.out.println("Viewed: " + phone.getName());
+        displayRecentlyViewed(recentlyViewed);
+        
+        // Test re-visiting middle item
+        System.out.println("\n--- Re-visiting Middle Item (T-Shirt) ---");
+        recentlyViewed.addRecentlyViewedItem(tshirt);
+        System.out.println("Viewed: " + tshirt.getName() + " again");
+        System.out.println("Expected: T-Shirt moves to front");
+        displayRecentlyViewed(recentlyViewed);
+        
         System.out.println("\n=== ORIGINAL DEMONSTRATION (Using List) ===\n");
         
         // Original demonstration using List
@@ -132,14 +189,14 @@ public class Main {
         
         // Demonstrate item operations
         System.out.println("\n--- Item Operations ---");
-        Item laptop = inventory.get(inventory.size() - 1); // Most expensive item
-        System.out.println("Original price of " + laptop.getName() + ": Rs." + laptop.getPrice());
-        laptop.setPrice(42999.00);
-        System.out.println("Updated price: Rs." + laptop.getPrice());
+        Item laptopItem = inventory.get(inventory.size() - 1); // Most expensive item
+        System.out.println("Original price of " + laptopItem.getName() + ": Rs." + laptopItem.getPrice());
+        laptopItem.setPrice(42999.00);
+        System.out.println("Updated price: Rs." + laptopItem.getPrice());
         
-        System.out.println("\nOriginal quantity: " + laptop.getQuantity());
-        laptop.setQuantity(laptop.getQuantity() - 1);
-        System.out.println("After selling 1 unit: " + laptop.getQuantity());
+        System.out.println("\nOriginal quantity: " + laptopItem.getQuantity());
+        laptopItem.setQuantity(laptopItem.getQuantity() - 1);
+        System.out.println("After selling 1 unit: " + laptopItem.getQuantity());
         
         // Display specific item types
         System.out.println("\n--- Books Only ---");
@@ -217,5 +274,33 @@ public class Main {
             total += item.getPrice() * item.getQuantity();
         }
         return total;
+    }
+    
+    public static void displayRecentlyViewed(RecentlyViewedItems recentlyViewed) {
+        List<Item> items = recentlyViewed.getRecentlyViewedItems();
+        System.out.println("Recently Viewed Items (" + items.size() + " items):");
+        
+        if (items.isEmpty()) {
+            System.out.println("  (empty)");
+            return;
+        }
+        
+        for (int i = 0; i < items.size(); i++) {
+            Item item = items.get(i);
+            System.out.print("  " + (i + 1) + ". " + item.getName());
+            
+            if (item instanceof Book) {
+                Book book = (Book) item;
+                System.out.print(" by " + book.getAuthor());
+            } else if (item instanceof Electronics) {
+                Electronics electronics = (Electronics) item;
+                System.out.print(" (Warranty: " + electronics.getWarranty() + " months)");
+            } else if (item instanceof Clothing) {
+                Clothing clothing = (Clothing) item;
+                System.out.print(" (Size: " + clothing.getSize() + ")");
+            }
+            
+            System.out.println(" - Rs." + item.getPrice());
+        }
     }
 }
