@@ -158,6 +158,70 @@ public class Main {
         System.out.println("Expected: T-Shirt moves to front");
         displayRecentlyViewed(recentlyViewed);
         
+        // Demonstrate Priority-Based Order Processing
+        System.out.println("\n=== MILESTONE 4: PRIORITY-BASED ORDER PROCESSING ===\n");
+        
+        OrderProcessor orderProcessor = new OrderProcessor();
+        
+        // Add mixed orders (Regular and Express)
+        System.out.println("--- Adding Orders ---");
+        orderProcessor.addOrder(new Order("ORD005", false)); // Regular
+        orderProcessor.addOrder(new Order("ORD001", true));  // Express
+        orderProcessor.addOrder(new Order("ORD003", false)); // Regular
+        orderProcessor.addOrder(new Order("ORD002", true));  // Express
+        orderProcessor.addOrder(new Order("ORD004", false)); // Regular
+        orderProcessor.addOrder(new Order("ORD006", true));  // Express
+        
+        System.out.println("\nTotal orders in queue: " + orderProcessor.getSize());
+        
+        // Process orders according to priority
+        System.out.println("\n--- Processing Orders (Priority-Based) ---");
+        System.out.println("Expected Order:");
+        System.out.println("1. Express orders first (ORD001, ORD002, ORD006) - alphabetically");
+        System.out.println("2. Regular orders next (ORD003, ORD004, ORD005) - alphabetically\n");
+        
+        int orderNumber = 1;
+        while (orderProcessor.getSize() > 0) {
+            Order processed = orderProcessor.processOrder();
+            System.out.println(orderNumber + ". Processed: " + processed);
+            orderNumber++;
+        }
+        
+        // Test with another batch
+        System.out.println("\n--- Testing Another Batch ---");
+        orderProcessor.addOrder(new Order("ORD101", false)); // Regular
+        orderProcessor.addOrder(new Order("ORD102", false)); // Regular
+        orderProcessor.addOrder(new Order("ORD103", true));  // Express
+        orderProcessor.addOrder(new Order("ORD104", false)); // Regular
+        orderProcessor.addOrder(new Order("ORD105", true));  // Express
+        
+        System.out.println("\nPeek at next order: " + orderProcessor.peekNextOrder());
+        System.out.println("Queue size: " + orderProcessor.getSize());
+        
+        System.out.println("\nProcessing all orders:");
+        orderNumber = 1;
+        while (orderProcessor.getSize() > 0) {
+            Order processed = orderProcessor.processOrder();
+            System.out.println(orderNumber + ". " + processed);
+            orderNumber++;
+        }
+        
+        // Test same type comparison
+        System.out.println("\n--- Testing Same Type Priority (All Express) ---");
+        orderProcessor.addOrder(new Order("ORD203", true)); // Express
+        orderProcessor.addOrder(new Order("ORD201", true)); // Express
+        orderProcessor.addOrder(new Order("ORD205", true)); // Express
+        orderProcessor.addOrder(new Order("ORD202", true)); // Express
+        orderProcessor.addOrder(new Order("ORD204", true)); // Express
+        
+        System.out.println("Expected: Alphabetical order (ORD201, ORD202, ORD203, ORD204, ORD205)\n");
+        orderNumber = 1;
+        while (orderProcessor.getSize() > 0) {
+            Order processed = orderProcessor.processOrder();
+            System.out.println(orderNumber + ". " + processed);
+            orderNumber++;
+        }
+        
         System.out.println("\n=== ORIGINAL DEMONSTRATION (Using List) ===\n");
         
         // Original demonstration using List
